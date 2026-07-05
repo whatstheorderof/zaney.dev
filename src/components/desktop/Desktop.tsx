@@ -12,13 +12,24 @@ import { DesktopIcon } from "./DesktopIcon";
 import { Dock } from "./Dock";
 import { MenuBar } from "./MenuBar";
 
-/** macOS-style arrangement: columns from the top-right corner, filling down. */
+/**
+ * macOS-style arrangement: columns from the top-right corner, filling down.
+ * Sized from the real viewport so columns never collide on narrow screens.
+ * Only called from user actions, so `window` is safe here.
+ */
 function gridLayout(items: DesktopItem[]): DesktopItem[] {
-  const ROWS = 4;
+  const w = window.innerWidth;
+  const h = window.innerHeight;
+  const COL_W = 112; // icon width (96px) + gutter
+  const ROW_H = 132; // icon + label + gutter
+  const TOP = 70; // below the menu bar
+  const BOTTOM = 120; // above the dock
+  const RIGHT = 120; // inset of the first column from the right edge
+  const rows = Math.max(1, Math.floor((h - TOP - BOTTOM) / ROW_H));
   return items.map((item, i) => ({
     ...item,
-    x: 88 - Math.floor(i / ROWS) * 10,
-    y: 12 + (i % ROWS) * 19,
+    x: (Math.max(8, w - RIGHT - Math.floor(i / rows) * COL_W) / w) * 100,
+    y: ((TOP + (i % rows) * ROW_H) / h) * 100,
   }));
 }
 
@@ -26,6 +37,9 @@ type MenuState = { x: number; y: number; itemId: string | null };
 
 export function Desktop() {
   const [items, setItems] = useState(initialItems);
+  // Bumped on every arrange: remounts icons at their new spots so the pop-in
+  // entrance replays. (CSS-transitioning icon positions here hit a browser
+  // bug where transitions froze at their first frame on some icons.)
   const [layoutKey, setLayoutKey] = useState(0);
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [aboutOpen, setAboutOpen] = useState(false);
@@ -48,10 +62,11 @@ export function Desktop() {
 
   const arrange = useCallback(
     (order?: (a: DesktopItem, b: DesktopItem) => number) => {
-      setItems((prev) => gridLayout(order ? [...prev].sort(order) : prev));
+      const next = order ? [...items].sort(order) : items;
+      setItems(gridLayout(next));
       setLayoutKey((k) => k + 1);
     },
-    []
+    [items]
   );
 
   const onContextMenu = (e: React.MouseEvent) => {
@@ -113,7 +128,10 @@ export function Desktop() {
       className="wallpaper relative h-svh w-full select-none overflow-hidden"
       onContextMenu={onContextMenu}
     >
-      <MenuBar onAbout={() => setAboutOpen(true)} />
+      <MenuBar
+        onAbout={() => setAboutOpen(true)}
+        onView={(x, y) => setMenu({ x, y, itemId: null })}
+      />
 
       {/* Desktop surface: icons + windows live in their own stacking context */}
       <div
@@ -131,11 +149,10 @@ export function Desktop() {
 
         {items.map((item, i) => (
           <DesktopIcon
-            key={item.id}
+            key={`${item.id}:${layoutKey}`}
             item={item}
             index={i}
             selected={selectedId === item.id}
-            resetKey={layoutKey}
             onSelect={setSelectedId}
             onOpen={openItem}
           />
@@ -146,7 +163,7 @@ export function Desktop() {
 
       {!hasOpened && (
         <p className="pointer-events-none fixed inset-x-0 bottom-24 z-20 text-center text-xs font-medium text-neutral-700/60">
-          double-click an icon to open it · right-click to organise
+          double-click an icon to open it · organise via View or right-click
         </p>
       )}
 

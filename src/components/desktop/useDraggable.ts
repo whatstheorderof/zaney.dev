@@ -15,19 +15,12 @@ type DragState = {
 /**
  * Pointer-event based dragging. Returns a px offset to apply as a transform,
  * plus handlers to spread on the draggable element. Taps (presses that never
- * exceed the drag threshold) are reported through `onTap`. Changing `resetKey`
- * snaps the offset back to zero (used when the desktop re-arranges icons).
+ * exceed the drag threshold) are reported through `onTap`.
  */
-export function useDraggable(onTap?: () => void, resetKey?: unknown) {
+export function useDraggable(onTap?: () => void) {
   const [offset, setOffset] = useState({ x: 0, y: 0 });
   const [dragging, setDragging] = useState(false);
   const state = useRef<DragState | null>(null);
-
-  const [lastResetKey, setLastResetKey] = useState(resetKey);
-  if (lastResetKey !== resetKey) {
-    setLastResetKey(resetKey);
-    setOffset({ x: 0, y: 0 });
-  }
 
   const onPointerDown = useCallback(
     (e: React.PointerEvent<HTMLElement>) => {
