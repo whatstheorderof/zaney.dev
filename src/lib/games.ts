@@ -56,6 +56,14 @@ export const zaneyGames: Game[] = [
     url: "https://zaneysearch.vercel.app/",
     status: "live",
   },
+  {
+    slug: "zaney-logic",
+    name: "Zaney Logic",
+    tagline: "Daily logic mysteries — deduce who, where, and when.",
+    category: "Puzzle",
+    url: "https://zaneylogic.vercel.app/",
+    status: "live",
+  },
 ];
 
 export const otherGames: Game[] = [
@@ -73,6 +81,22 @@ export const otherGames: Game[] = [
     tagline: "Whimsical children's books, comics & colouring books.",
     category: "Books",
     url: "https://zaneytales.com/",
+    status: "live",
+  },
+  {
+    slug: "saz-skyroads",
+    name: "SAZ: Skyroads",
+    tagline: "Ride the sky roads — watch your fuel and oxygen.",
+    category: "Arcade",
+    url: "https://sazskyroads.vercel.app/",
+    status: "live",
+  },
+  {
+    slug: "grive-image-host",
+    name: "Drive Image Host",
+    tagline: "Paste a Google Drive link, get a clean embeddable img tag.",
+    category: "Tool",
+    url: "https://griveimagehost.vercel.app/",
     status: "live",
   },
 ];

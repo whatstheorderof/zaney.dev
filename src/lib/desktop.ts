@@ -27,6 +27,9 @@ const positions: Record<string, [number, number]> = {
   "say-more": [83, 42],
   "zaney-tales": [13, 60],
   "zaney-search": [34, 64],
+  "zaney-logic": [25, 32],
+  "saz-skyroads": [68, 60],
+  "grive-image-host": [54, 12],
 };
 
 export const gameItems: DesktopItem[] = allGames.map((game) => {
