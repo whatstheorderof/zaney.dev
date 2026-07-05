@@ -22,13 +22,60 @@ code {
   font-family: var(--font-mono), monospace;
 }
 
-/* ---- Desktop wallpaper: soft monochrome gradient + film grain ---- */
+/* ---- Desktop wallpapers (all get the film-grain overlay below) ---- */
 
-.wallpaper {
+.wallpaper-graphite {
   background:
     radial-gradient(120vmax 80vmax at 72% 12%, #dcdcdc, transparent 60%),
     radial-gradient(100vmax 70vmax at 15% 85%, #8f8f8f, transparent 55%),
     linear-gradient(160deg, #cfcfcf 0%, #b5b5b5 55%, #9a9a9a 100%);
+}
+
+.wallpaper-space {
+  background-color: #0b1026;
+  background-image:
+    radial-gradient(1px 1px at 22px 34px, rgba(255, 255, 255, 0.9), transparent),
+    radial-gradient(1px 1px at 88px 132px, rgba(255, 255, 255, 0.5), transparent),
+    radial-gradient(1.5px 1.5px at 161px 61px, rgba(255, 255, 255, 0.85), transparent),
+    radial-gradient(1px 1px at 45px 178px, rgba(255, 255, 255, 0.6), transparent),
+    radial-gradient(80vmax 60vmax at 75% 15%, rgba(103, 63, 211, 0.35), transparent 60%),
+    radial-gradient(70vmax 50vmax at 15% 85%, rgba(0, 130, 190, 0.3), transparent 60%),
+    linear-gradient(180deg, #0b1026 0%, #131a3a 55%, #1c1240 100%);
+  background-size:
+    190px 190px,
+    240px 240px,
+    300px 300px,
+    220px 220px,
+    auto,
+    auto,
+    auto;
+}
+
+.wallpaper-sea {
+  background:
+    radial-gradient(90vmax 55vmax at 70% -10%, rgba(255, 255, 255, 0.35), transparent 55%),
+    radial-gradient(60vmax 35vmax at 30% 40%, rgba(120, 225, 235, 0.3), transparent 60%),
+    radial-gradient(85vmax 55vmax at 20% 115%, rgba(3, 55, 85, 0.65), transparent 65%),
+    linear-gradient(180deg, #7fd4e6 0%, #2b9db8 45%, #0c5a7c 100%);
+}
+
+/* Frutiger-Aero glossy 2000s: aqua sky, green hills, bubbles, lens sheen */
+.wallpaper-aero {
+  background:
+    linear-gradient(115deg, rgba(255, 255, 255, 0.4) 0%, rgba(255, 255, 255, 0) 32%),
+    radial-gradient(22vmax 22vmax at 82% 22%, rgba(255, 255, 255, 0.45), rgba(255, 255, 255, 0.08) 55%, transparent 62%),
+    radial-gradient(9vmax 9vmax at 14% 58%, rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0.05) 55%, transparent 65%),
+    radial-gradient(5vmax 5vmax at 30% 30%, rgba(255, 255, 255, 0.35), transparent 65%),
+    radial-gradient(65vmax 28vmax at 50% 106%, rgba(255, 255, 255, 0.45), transparent 60%),
+    radial-gradient(120vmax 60vmax at 50% 118%, #6edb3f, transparent 55%),
+    linear-gradient(180deg, #1e9bff 0%, #66ccff 45%, #a5e87b 100%);
+}
+
+.wallpaper-sunset {
+  background:
+    radial-gradient(45vmax 32vmax at 50% 80%, rgba(255, 214, 130, 0.75), transparent 62%),
+    radial-gradient(90vmax 50vmax at 50% 115%, rgba(247, 164, 92, 0.6), transparent 65%),
+    linear-gradient(180deg, #2e1a47 0%, #8e326e 42%, #e2636e 68%, #f7a45c 100%);
 }
 
 .wallpaper::after {
@@ -64,14 +111,20 @@ code {
   }
 }
 
+/*
+ * Note: only animate scale/opacity here. The window is centered with
+ * Tailwind's -translate-x/y-1/2, which uses the separate `translate`
+ * property — putting translate() in these keyframes would compose with it
+ * and double the shift.
+ */
 @keyframes window-in {
   from {
     opacity: 0;
-    transform: translate(-50%, -50%) scale(0.92);
+    transform: scale(0.92);
   }
   to {
     opacity: 1;
-    transform: translate(-50%, -50%) scale(1);
+    transform: scale(1);
   }
 }
 

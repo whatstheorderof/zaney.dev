@@ -1,16 +1,22 @@
 "use client";
 
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import {
   desktopItems as initialItems,
   dockItems,
   type DesktopItem,
 } from "@/lib/desktop";
+import {
+  defaultWallpaper,
+  wallpapers,
+  WALLPAPER_STORAGE_KEY,
+} from "@/lib/wallpapers";
 import { AboutWindow } from "./AboutWindow";
 import { ContextMenu, type MenuEntry } from "./ContextMenu";
 import { DesktopIcon } from "./DesktopIcon";
 import { Dock } from "./Dock";
 import { MenuBar } from "./MenuBar";
+import { WallpaperWindow } from "./WallpaperWindow";
 
 /**
  * macOS-style arrangement: columns from the top-right corner, filling down.
@@ -43,8 +49,29 @@ export function Desktop() {
   const [layoutKey, setLayoutKey] = useState(0);
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [aboutOpen, setAboutOpen] = useState(false);
+  const [wallpaperOpen, setWallpaperOpen] = useState(false);
+  const [wallpaperId, setWallpaperId] = useState(defaultWallpaper.id);
   const [hasOpened, setHasOpened] = useState(false);
   const [menu, setMenu] = useState<MenuState | null>(null);
+
+  // Restore the saved wallpaper (async so SSR markup stays deterministic)
+  useEffect(() => {
+    const raf = requestAnimationFrame(() => {
+      const saved = localStorage.getItem(WALLPAPER_STORAGE_KEY);
+      if (saved && wallpapers.some((w) => w.id === saved)) {
+        setWallpaperId(saved);
+      }
+    });
+    return () => cancelAnimationFrame(raf);
+  }, []);
+
+  const chooseWallpaper = useCallback((id: string) => {
+    setWallpaperId(id);
+    localStorage.setItem(WALLPAPER_STORAGE_KEY, id);
+  }, []);
+
+  const wallpaper =
+    wallpapers.find((w) => w.id === wallpaperId) ?? defaultWallpaper;
 
   const openItem = useCallback((item: DesktopItem) => {
     setHasOpened(true);
@@ -118,6 +145,11 @@ export function Desktop() {
         { type: "separator" },
         {
           type: "item",
+          label: "Change Wallpaper…",
+          onSelect: () => setWallpaperOpen(true),
+        },
+        {
+          type: "item",
           label: "About This Desktop",
           onSelect: () => setAboutOpen(true),
         },
@@ -125,7 +157,7 @@ export function Desktop() {
 
   return (
     <div
-      className="wallpaper relative h-svh w-full select-none overflow-hidden"
+      className={`wallpaper ${wallpaper.className} relative h-svh w-full select-none overflow-hidden`}
       onContextMenu={onContextMenu}
     >
       <MenuBar
@@ -142,7 +174,13 @@ export function Desktop() {
       >
         {/* Faint wordmark baked into the wallpaper */}
         <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
-          <span className="text-[13vw] font-black tracking-tighter text-white/30 mix-blend-overlay">
+          <span
+            className={`text-[13vw] font-black tracking-tighter ${
+              wallpaper.tone === "dark"
+                ? "text-white/15"
+                : "mix-blend-overlay text-white/30"
+            }`}
+          >
             zaney.dev
           </span>
         </div>
@@ -159,10 +197,21 @@ export function Desktop() {
         ))}
 
         {aboutOpen && <AboutWindow onClose={() => setAboutOpen(false)} />}
+        {wallpaperOpen && (
+          <WallpaperWindow
+            current={wallpaperId}
+            onSelect={chooseWallpaper}
+            onClose={() => setWallpaperOpen(false)}
+          />
+        )}
       </div>
 
       {!hasOpened && (
-        <p className="pointer-events-none fixed inset-x-0 bottom-24 z-20 text-center text-xs font-medium text-neutral-700/60">
+        <p
+          className={`pointer-events-none fixed inset-x-0 bottom-24 z-20 text-center text-xs font-medium ${
+            wallpaper.tone === "dark" ? "text-white/60" : "text-neutral-700/60"
+          }`}
+        >
           double-click an icon to open it · organise via View or right-click
         </p>
       )}

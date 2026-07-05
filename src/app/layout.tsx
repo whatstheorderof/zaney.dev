@@ -13,8 +13,24 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://zaney.dev"),
   title: "zaney.dev",
   description: "Zane's desktop — daily games, experiments, and more.",
+  alternates: {
+    canonical: "/",
+  },
+  openGraph: {
+    title: "zaney.dev",
+    description: "Zane's desktop — daily games, experiments, and more.",
+    url: "https://zaney.dev",
+    siteName: "zaney.dev",
+    type: "website",
+  },
+  twitter: {
+    card: "summary",
+    title: "zaney.dev",
+    description: "Zane's desktop — daily games, experiments, and more.",
+  },
 };
 
 export default function RootLayout({
