@@ -10,6 +10,7 @@ const games = [
   { slug: "zaney-word", url: "https://zaneyword.vercel.app/" },
   { slug: "say-more", url: "https://saymoregame.com/" },
   { slug: "zaney-tales", url: "https://zaneytales.com/" },
+  { slug: "zaney-search", url: "https://zaneysearch.vercel.app/" },
 ];
 
 const outDir = path.join(path.dirname(fileURLToPath(import.meta.url)), "..", "public", "screenshots");

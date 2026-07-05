@@ -48,6 +48,14 @@ export const zaneyGames: Game[] = [
     url: "https://zaneyword.vercel.app/",
     status: "live",
   },
+  {
+    slug: "zaney-search",
+    name: "Zaney Search",
+    tagline: "Daily themed word searches with a twist.",
+    category: "Word",
+    url: "https://zaneysearch.vercel.app/",
+    status: "live",
+  },
 ];
 
 export const otherGames: Game[] = [
