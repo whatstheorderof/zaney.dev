@@ -59,6 +59,14 @@ export const otherGames: Game[] = [
     url: "https://saymoregame.com/",
     status: "live",
   },
+  {
+    slug: "zaney-tales",
+    name: "Zaney Tales",
+    tagline: "Whimsical children's books, comics & colouring books.",
+    category: "Books",
+    url: "https://zaneytales.com/",
+    status: "live",
+  },
 ];
 
 export const allGames: Game[] = [...zaneyGames, ...otherGames];

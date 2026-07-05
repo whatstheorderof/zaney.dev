@@ -39,12 +39,15 @@ export function DesktopIcon({
   item,
   index,
   selected,
+  resetKey,
   onSelect,
   onOpen,
 }: {
   item: DesktopItem;
   index: number;
   selected: boolean;
+  /** Changing this snaps the icon back to its base position (after a sort). */
+  resetKey: number;
   onSelect: (id: string) => void;
   onOpen: (item: DesktopItem) => void;
 }) {
@@ -60,11 +63,12 @@ export function DesktopIcon({
       lastTap.current = now;
     }
     onSelect(item.id);
-  });
+  }, resetKey);
 
   return (
     <div
       {...handlers}
+      data-icon-id={item.id}
       onPointerDownCapture={() => {
         setZ(nextZ());
         onSelect(item.id);
@@ -76,6 +80,10 @@ export function DesktopIcon({
         top: `${item.y}%`,
         transform: `translate(${offset.x}px, ${offset.y}px)`,
         zIndex: z,
+        // Slide smoothly when the desktop re-arranges; never while dragging
+        transition: dragging
+          ? "none"
+          : "left 0.5s cubic-bezier(0.3, 0.9, 0.3, 1), top 0.5s cubic-bezier(0.3, 0.9, 0.3, 1), transform 0.5s cubic-bezier(0.3, 0.9, 0.3, 1)",
       }}
     >
       <div

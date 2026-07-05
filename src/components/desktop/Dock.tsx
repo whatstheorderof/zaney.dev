@@ -33,7 +33,10 @@ export function Dock({
   };
 
   return (
-    <div className="animate-dock-in pointer-events-none fixed inset-x-0 bottom-3 z-40 flex justify-center">
+    <div
+      data-dock
+      className="animate-dock-in pointer-events-none fixed inset-x-0 bottom-3 z-40 flex justify-center"
+    >
       <div
         onMouseMove={(e) => {
           const rect = e.currentTarget.getBoundingClientRect();

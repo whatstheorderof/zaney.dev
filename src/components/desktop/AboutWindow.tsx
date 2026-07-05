@@ -9,6 +9,7 @@ export function AboutWindow({ onClose }: { onClose: () => void }) {
 
   return (
     <div
+      data-window
       onPointerDownCapture={() => setZ(nextZ())}
       className="animate-window-in absolute left-1/2 top-[38%] w-[min(400px,88vw)] -translate-x-1/2 -translate-y-1/2 overflow-hidden rounded-xl bg-white/90 shadow-2xl shadow-black/40 ring-1 ring-black/15 backdrop-blur-xl"
       style={{

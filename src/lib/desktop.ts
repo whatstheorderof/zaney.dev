@@ -7,6 +7,8 @@ export type DesktopIconArt =
 export type DesktopItem = {
   id: string;
   name: string;
+  /** What the item is, used by "Sort by Type" (e.g. Puzzle, Word, Books). */
+  kind: string;
   /** External url opened on double-click (or mailto:). Omitted for in-page items like the About window. */
   url?: string;
   action?: "about";
@@ -23,6 +25,7 @@ const positions: Record<string, [number, number]> = {
   "zaney-word": [55, 58],
   "zaney-links": [70, 17],
   "say-more": [83, 42],
+  "zaney-tales": [13, 60],
 };
 
 export const gameItems: DesktopItem[] = allGames.map((game) => {
@@ -30,6 +33,7 @@ export const gameItems: DesktopItem[] = allGames.map((game) => {
   return {
     id: game.slug,
     name: game.name,
+    kind: game.category,
     url: game.url,
     icon: { type: "screenshot" as const, src: `/screenshots/${game.slug}.png` },
     x,
@@ -40,6 +44,7 @@ export const gameItems: DesktopItem[] = allGames.map((game) => {
 export const aboutItem: DesktopItem = {
   id: "about",
   name: "about.txt",
+  kind: "Text File",
   action: "about",
   icon: { type: "glyph", glyph: "☻", className: "bg-neutral-900 text-white" },
   x: 87,
@@ -49,6 +54,7 @@ export const aboutItem: DesktopItem = {
 export const mailItem: DesktopItem = {
   id: "mail",
   name: "Say hi",
+  kind: "Contact",
   url: "mailto:deathbyleisure@gmail.com",
   icon: { type: "glyph", glyph: "✉", className: "bg-sky-500 text-white" },
   x: 0,
