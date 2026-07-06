@@ -4,7 +4,10 @@ import { useCallback, useEffect, useState } from "react";
 import {
   desktopItems as initialItems,
   dockItems,
+  ICON_SIZE_STORAGE_KEY,
+  ICON_SIZES,
   type DesktopItem,
+  type IconSize,
 } from "@/lib/desktop";
 import {
   defaultWallpaper,
@@ -16,6 +19,7 @@ import { ContextMenu, type MenuEntry } from "./ContextMenu";
 import { DesktopIcon } from "./DesktopIcon";
 import { Dock } from "./Dock";
 import { MenuBar } from "./MenuBar";
+import { MobilePages } from "./MobilePages";
 import { WallpaperWindow } from "./WallpaperWindow";
 
 /**
@@ -54,12 +58,18 @@ export function Desktop() {
   const [hasOpened, setHasOpened] = useState(false);
   const [menu, setMenu] = useState<MenuState | null>(null);
 
-  // Restore the saved wallpaper (async so SSR markup stays deterministic)
+  const [iconSize, setIconSize] = useState<IconSize>("medium");
+
+  // Restore saved settings (async so SSR markup stays deterministic)
   useEffect(() => {
     const raf = requestAnimationFrame(() => {
-      const saved = localStorage.getItem(WALLPAPER_STORAGE_KEY);
-      if (saved && wallpapers.some((w) => w.id === saved)) {
-        setWallpaperId(saved);
+      const savedWallpaper = localStorage.getItem(WALLPAPER_STORAGE_KEY);
+      if (savedWallpaper && wallpapers.some((w) => w.id === savedWallpaper)) {
+        setWallpaperId(savedWallpaper);
+      }
+      const savedSize = localStorage.getItem(ICON_SIZE_STORAGE_KEY);
+      if (savedSize && savedSize in ICON_SIZES) {
+        setIconSize(savedSize as IconSize);
       }
     });
     return () => cancelAnimationFrame(raf);
@@ -68,6 +78,11 @@ export function Desktop() {
   const chooseWallpaper = useCallback((id: string) => {
     setWallpaperId(id);
     localStorage.setItem(WALLPAPER_STORAGE_KEY, id);
+  }, []);
+
+  const chooseIconSize = useCallback((size: IconSize) => {
+    setIconSize(size);
+    localStorage.setItem(ICON_SIZE_STORAGE_KEY, size);
   }, []);
 
   const wallpaper =
@@ -143,6 +158,16 @@ export function Desktop() {
     : [
         ...organizeEntries,
         { type: "separator" },
+        ...(["small", "medium", "large"] as const).map(
+          (size): MenuEntry => ({
+            type: "item",
+            label: `${iconSize === size ? "✓ " : " "}${
+              size[0].toUpperCase() + size.slice(1)
+            } Icons`,
+            onSelect: () => chooseIconSize(size),
+          })
+        ),
+        { type: "separator" },
         {
           type: "item",
           label: "Change Wallpaper…",
@@ -185,16 +210,30 @@ export function Desktop() {
           </span>
         </div>
 
-        {items.map((item, i) => (
-          <DesktopIcon
-            key={`${item.id}:${layoutKey}`}
-            item={item}
-            index={i}
-            selected={selectedId === item.id}
-            onSelect={setSelectedId}
+        {/* Free-form desktop for pointer devices / wide screens */}
+        <div className="hidden sm:block">
+          {items.map((item, i) => (
+            <DesktopIcon
+              key={`${item.id}:${layoutKey}`}
+              item={item}
+              index={i}
+              selected={selectedId === item.id}
+              tilePx={ICON_SIZES[iconSize].tile}
+              onSelect={setSelectedId}
+              onOpen={openItem}
+            />
+          ))}
+        </div>
+
+        {/* iPhone-style swipeable pages on small screens */}
+        <div className="absolute inset-x-0 bottom-28 top-9 sm:hidden">
+          <MobilePages
+            items={items}
+            iconSize={iconSize}
+            tone={wallpaper.tone}
             onOpen={openItem}
           />
-        ))}
+        </div>
 
         {aboutOpen && <AboutWindow onClose={() => setAboutOpen(false)} />}
         {wallpaperOpen && (
@@ -212,7 +251,12 @@ export function Desktop() {
             wallpaper.tone === "dark" ? "text-white/60" : "text-neutral-700/60"
           }`}
         >
-          double-click an icon to open it · organise via View or right-click
+          <span className="sm:hidden">
+            tap an icon to open it · swipe for more
+          </span>
+          <span className="hidden sm:inline">
+            double-click an icon to open it · organise via View or right-click
+          </span>
         </p>
       )}
 

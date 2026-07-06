@@ -167,6 +167,14 @@ code {
   animation: menu-in 0.12s ease-out both;
 }
 
+.no-scrollbar {
+  scrollbar-width: none;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .animate-pop-in,
   .animate-window-in,

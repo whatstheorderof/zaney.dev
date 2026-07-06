@@ -18,6 +18,19 @@ export type DesktopItem = {
   y: number;
 };
 
+export type IconSize = "small" | "medium" | "large";
+
+export const ICON_SIZES: Record<
+  IconSize,
+  { tile: number; cols: number; cellH: number }
+> = {
+  small: { tile: 56, cols: 4, cellH: 108 },
+  medium: { tile: 64, cols: 3, cellH: 130 },
+  large: { tile: 80, cols: 3, cellH: 152 },
+};
+
+export const ICON_SIZE_STORAGE_KEY = "zaney-icon-size";
+
 const positions: Record<string, [number, number]> = {
   "zaney-sudoku": [9, 16],
   "zaney-tarot": [22, 50],

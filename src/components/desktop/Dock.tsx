@@ -70,7 +70,7 @@ export function Dock({
             setMouseX(null);
             setTooltip(null);
           }}
-          className="pointer-events-auto flex max-w-[calc(100vw-1rem)] items-end overflow-x-auto rounded-3xl border border-white/50 bg-white/40 px-3 py-2.5 shadow-2xl shadow-black/25 backdrop-blur-xl"
+          className="no-scrollbar pointer-events-auto flex max-w-[calc(100vw-1rem)] items-end overflow-x-auto rounded-3xl border border-white/50 bg-white/40 px-3 py-2.5 shadow-2xl shadow-black/25 backdrop-blur-xl"
           style={{ gap: GAP }}
         >
           {items.map((item, i) => {

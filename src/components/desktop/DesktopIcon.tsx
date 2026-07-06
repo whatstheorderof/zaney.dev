@@ -39,12 +39,15 @@ export function DesktopIcon({
   item,
   index,
   selected,
+  tilePx = 64,
   onSelect,
   onOpen,
 }: {
   item: DesktopItem;
   index: number;
   selected: boolean;
+  /** Icon tile size in px, from the user's icon-size setting. */
+  tilePx?: number;
   onSelect: (id: string) => void;
   onOpen: (item: DesktopItem) => void;
 }) {
@@ -92,7 +95,8 @@ export function DesktopIcon({
           }}
         >
         <div
-          className={`h-16 w-16 overflow-hidden rounded-2xl shadow-lg shadow-black/25 ring-1 transition-transform duration-200 ${
+          style={{ width: tilePx, height: tilePx }}
+          className={`overflow-hidden rounded-2xl shadow-lg shadow-black/25 ring-1 transition-transform duration-200 ${
             selected ? "ring-2 ring-white/90" : "ring-black/10"
           } ${dragging ? "scale-105 opacity-80" : ""}`}
         >
