@@ -167,14 +167,11 @@ export function Desktop() {
     setLayoutKey((k) => k + 1);
   }, [grouped, items]);
 
-  /** Single click/tap: show the info card (folders open straight away). */
+  /** Single click/tap: show the info card (folders open straight away).
+   * The card clamps itself to the viewport in CSS. */
   const showInfo = useCallback((item: DesktopItem, rect: DOMRect) => {
     if (item.action === "folder") return;
-    const x = Math.min(
-      Math.max(rect.left + rect.width / 2, 140),
-      window.innerWidth - 140
-    );
-    setInfo({ id: item.id, x, y: rect.top });
+    setInfo({ id: item.id, x: rect.left + rect.width / 2, y: rect.top });
   }, []);
 
   /** Tap flow for mobile pages and open folders: info first, then open. */
@@ -368,7 +365,13 @@ export function Desktop() {
       )}
 
       {infoItem && info && (
-        <IconInfoCard item={infoItem} x={info.x} y={info.y} onOpen={openItem} />
+        <IconInfoCard
+          item={infoItem}
+          x={info.x}
+          y={info.y}
+          onOpen={openItem}
+          onClose={() => setInfo(null)}
+        />
       )}
 
       {menu && (
