@@ -48,6 +48,8 @@ const positions: Record<string, [number, number]> = {
   "grive-image-host": [54, 12],
   "zaney-strands": [47, 40],
   "zaney-games": [64, 33],
+  "zaney-kakuro": [30, 46],
+  "zaney-aquarium": [75, 50],
 };
 
 export const gameItems: DesktopItem[] = allGames.map((game) => {

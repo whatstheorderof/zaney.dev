@@ -80,6 +80,14 @@ export const zaneyGames: Game[] = [
     url: "https://zaneylogic.vercel.app/",
     status: "live",
   },
+  {
+    slug: "zaney-kakuro",
+    name: "Zaney Kakuro",
+    tagline: "Crossword meets arithmetic — daily number puzzles.",
+    category: "Puzzle",
+    url: "https://zaneykakuro.vercel.app/",
+    status: "live",
+  },
 ];
 
 export const otherGames: Game[] = [
@@ -113,6 +121,14 @@ export const otherGames: Game[] = [
     tagline: "Paste a Google Drive link, get a clean embeddable img tag.",
     category: "Tool",
     url: "https://griveimagehost.vercel.app/",
+    status: "live",
+  },
+  {
+    slug: "zaney-aquarium",
+    name: "Zaney Aquarium",
+    tagline: "Guide the fish home — rotate, slide, flow.",
+    category: "Puzzle",
+    url: "https://zaneyaquarium.vercel.app/",
     status: "live",
   },
 ];
