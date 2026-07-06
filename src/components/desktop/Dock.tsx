@@ -8,8 +8,17 @@ const BASE_SIZE = 52;
 const GAP = 10;
 const MAX_BOOST = 0.5;
 const INFLUENCE = 130;
+// On phones only the first few games plus about/mail show in the dock —
+// the paged home screen already lists everything.
+const MOBILE_DOCK_GAMES = 3;
 
 type Tooltip = { name: string; x: number; y: number };
+
+let canHover: boolean | null = null;
+function hoverCapable() {
+  canHover ??= window.matchMedia("(hover: hover)").matches;
+  return canHover;
+}
 
 export function Dock({
   items,
@@ -77,9 +86,12 @@ export function Dock({
             const scale = scaleFor(i);
             const size = BASE_SIZE * scale;
             const showTip = (e: React.MouseEvent<HTMLButtonElement>) => {
+              if (!hoverCapable()) return;
               const r = e.currentTarget.getBoundingClientRect();
               setTooltip({ name: item.name, x: r.left + r.width / 2, y: r.top });
             };
+            const onMobile =
+              i < MOBILE_DOCK_GAMES || item.id === "about" || item.id === "mail";
             return (
               <button
                 key={item.id}
@@ -87,7 +99,9 @@ export function Dock({
                 onClick={() => onOpen(item)}
                 onMouseEnter={showTip}
                 onMouseMove={showTip}
-                className={`relative block shrink-0 ${
+                className={`relative shrink-0 ${
+                  onMobile ? "block" : "hidden sm:block"
+                } ${
                   mouseX === null ? "transition-[width,height] duration-200" : ""
                 }`}
                 style={{ width: size, height: size }}

@@ -2,6 +2,7 @@ import { chromium } from "playwright";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
+// `clip` crops a square region for icon-friendly art on light/busy pages.
 const games = [
   { slug: "zaney-sudoku", url: "https://www.zaneysudoku.com/" },
   { slug: "zaney-tarot", url: "https://www.zaneytarot.com/" },
@@ -10,11 +11,11 @@ const games = [
   { slug: "zaney-word", url: "https://zaneyword.vercel.app/" },
   { slug: "say-more", url: "https://saymoregame.com/" },
   { slug: "zaney-tales", url: "https://zaneytales.com/" },
-  { slug: "zaney-search", url: "https://zaneysearch.vercel.app/" },
-  { slug: "zaney-logic", url: "https://zaneylogic.vercel.app/" },
+  { slug: "zaney-search", url: "https://zaneysearch.vercel.app/", clip: { x: 0, y: 0, width: 800, height: 800 } },
+  { slug: "zaney-logic", url: "https://zaneylogic.vercel.app/", clip: { x: 40, y: 0, width: 780, height: 780 } },
   { slug: "saz-skyroads", url: "https://sazskyroads.vercel.app/" },
-  { slug: "grive-image-host", url: "https://griveimagehost.vercel.app/" },
-  { slug: "zaney-strands", url: "https://zaneystrands.vercel.app/" },
+  { slug: "grive-image-host", url: "https://griveimagehost.vercel.app/", clip: { x: 120, y: 30, width: 740, height: 740 } },
+  { slug: "zaney-strands", url: "https://zaneystrands.vercel.app/", clip: { x: 330, y: 85, width: 540, height: 540 } },
 ];
 
 const outDir = path.join(path.dirname(fileURLToPath(import.meta.url)), "..", "public", "screenshots");
@@ -35,7 +36,7 @@ for (const game of games) {
     }
     await page.keyboard.press("Escape");
     await page.waitForTimeout(300);
-    await page.screenshot({ path: dest });
+    await page.screenshot({ path: dest, clip: game.clip });
   } catch (err) {
     console.error(`Failed to capture ${game.url}:`, err.message);
   }

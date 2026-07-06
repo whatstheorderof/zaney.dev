@@ -28,7 +28,7 @@ export const metadata: Metadata = {
     type: "website",
   },
   twitter: {
-    card: "summary",
+    card: "summary_large_image",
     title: "zaney.dev",
     description: "Zane's desktop — daily games, experiments, and more.",
   },

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { nextZ, useDraggable } from "./useDraggable";
 
 export function DesktopWindow({
@@ -16,6 +16,14 @@ export function DesktopWindow({
 }) {
   const [z, setZ] = useState(() => nextZ());
   const { offset, handlers } = useDraggable();
+
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [onClose]);
 
   return (
     <div

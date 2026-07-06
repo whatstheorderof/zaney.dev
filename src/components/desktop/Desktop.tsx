@@ -311,6 +311,7 @@ export function Desktop() {
               onSelect={setSelectedId}
               onOpen={openItem}
               onInfo={showInfo}
+              onPress={() => setInfo(null)}
             />
           ))}
         </div>

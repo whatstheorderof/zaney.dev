@@ -56,6 +56,7 @@ export function DesktopIcon({
   onSelect,
   onOpen,
   onInfo,
+  onPress,
 }: {
   item: DesktopItem;
   index: number;
@@ -66,6 +67,8 @@ export function DesktopIcon({
   onOpen: (item: DesktopItem) => void;
   /** Called on a single tap with the icon's viewport rect (for the info card). */
   onInfo?: (item: DesktopItem, rect: DOMRect) => void;
+  /** Called on pointer down, before any tap/drag resolves. */
+  onPress?: () => void;
 }) {
   const [z, setZ] = useState(1);
   const lastTap = useRef(0);
@@ -88,11 +91,22 @@ export function DesktopIcon({
       ref={rootRef}
       {...handlers}
       data-icon-id={item.id}
+      role="button"
+      tabIndex={0}
+      aria-label={item.name}
       onPointerDownCapture={() => {
         setZ(nextZ());
         onSelect(item.id);
+        onPress?.();
       }}
-      className="absolute flex w-24 touch-none flex-col items-center"
+      onKeyDown={(e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          onOpen(item);
+        }
+      }}
+      onFocus={() => onSelect(item.id)}
+      className="absolute flex w-24 touch-none flex-col items-center rounded-xl outline-offset-4 outline-sky-500 focus-visible:outline-2"
       style={{
         // Clamp so initial positions never hang off narrow viewports
         left: `min(${item.x}%, calc(100% - 6.5rem))`,
