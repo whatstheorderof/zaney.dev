@@ -57,6 +57,14 @@ export const zaneyGames: Game[] = [
     status: "live",
   },
   {
+    slug: "zaney-strands",
+    name: "Zaney Strands",
+    tagline: "Trace connected letters to find the hidden story.",
+    category: "Word",
+    url: "https://zaneystrands.vercel.app/",
+    status: "live",
+  },
+  {
     slug: "zaney-logic",
     name: "Zaney Logic",
     tagline: "Daily logic mysteries — deduce who, where, and when.",

@@ -2,16 +2,19 @@ import { allGames } from "./games";
 
 export type DesktopIconArt =
   | { type: "screenshot"; src: string }
-  | { type: "glyph"; glyph: string; className: string };
+  | { type: "glyph"; glyph: string; className: string }
+  | { type: "folder"; items: DesktopItem[] };
 
 export type DesktopItem = {
   id: string;
   name: string;
   /** What the item is, used by "Sort by Type" (e.g. Puzzle, Word, Books). */
   kind: string;
+  /** Short blurb shown in the click-for-info card. */
+  description?: string;
   /** External url opened on double-click (or mailto:). Omitted for in-page items like the About window. */
   url?: string;
-  action?: "about";
+  action?: "about" | "folder";
   icon: DesktopIconArt;
   /** Initial position on the desktop, in % of the viewport. */
   x: number;
@@ -43,6 +46,7 @@ const positions: Record<string, [number, number]> = {
   "zaney-logic": [25, 32],
   "saz-skyroads": [68, 60],
   "grive-image-host": [54, 12],
+  "zaney-strands": [47, 40],
 };
 
 export const gameItems: DesktopItem[] = allGames.map((game) => {
@@ -51,6 +55,7 @@ export const gameItems: DesktopItem[] = allGames.map((game) => {
     id: game.slug,
     name: game.name,
     kind: game.category,
+    description: game.tagline,
     url: game.url,
     icon: { type: "screenshot" as const, src: `/screenshots/${game.slug}.png` },
     x,
@@ -62,6 +67,7 @@ export const aboutItem: DesktopItem = {
   id: "about",
   name: "about.txt",
   kind: "Text File",
+  description: "Who made all this — and how to say hi.",
   action: "about",
   icon: { type: "glyph", glyph: "☻", className: "bg-neutral-900 text-white" },
   x: 87,
@@ -72,6 +78,7 @@ export const mailItem: DesktopItem = {
   id: "mail",
   name: "Say hi",
   kind: "Contact",
+  description: "Send me an email.",
   url: "mailto:deathbyleisure@gmail.com",
   icon: { type: "glyph", glyph: "✉", className: "bg-sky-500 text-white" },
   x: 0,

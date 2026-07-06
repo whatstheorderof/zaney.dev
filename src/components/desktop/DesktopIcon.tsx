@@ -26,6 +26,19 @@ export function IconArt({
       />
     );
   }
+  if (item.icon.type === "folder") {
+    return (
+      <div
+        className={`${className} grid grid-cols-3 gap-[6%] bg-white/40 p-[9%] backdrop-blur-md`}
+      >
+        {item.icon.items.slice(0, 9).map((child) => (
+          <span key={child.id} className="overflow-hidden rounded-[22%]">
+            <IconArt item={child} className="h-full w-full" />
+          </span>
+        ))}
+      </div>
+    );
+  }
   return (
     <div
       className={`${className} flex items-center justify-center text-3xl leading-none ${item.icon.className}`}
@@ -42,6 +55,7 @@ export function DesktopIcon({
   tilePx = 64,
   onSelect,
   onOpen,
+  onInfo,
 }: {
   item: DesktopItem;
   index: number;
@@ -50,9 +64,12 @@ export function DesktopIcon({
   tilePx?: number;
   onSelect: (id: string) => void;
   onOpen: (item: DesktopItem) => void;
+  /** Called on a single tap with the icon's viewport rect (for the info card). */
+  onInfo?: (item: DesktopItem, rect: DOMRect) => void;
 }) {
   const [z, setZ] = useState(1);
   const lastTap = useRef(0);
+  const rootRef = useRef<HTMLDivElement>(null);
 
   const { offset, dragging, handlers } = useDraggable(() => {
     const now = Date.now();
@@ -61,12 +78,14 @@ export function DesktopIcon({
       onOpen(item);
     } else {
       lastTap.current = now;
+      if (rootRef.current) onInfo?.(item, rootRef.current.getBoundingClientRect());
     }
     onSelect(item.id);
   });
 
   return (
     <div
+      ref={rootRef}
       {...handlers}
       data-icon-id={item.id}
       onPointerDownCapture={() => {

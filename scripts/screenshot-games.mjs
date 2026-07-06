@@ -14,6 +14,7 @@ const games = [
   { slug: "zaney-logic", url: "https://zaneylogic.vercel.app/" },
   { slug: "saz-skyroads", url: "https://sazskyroads.vercel.app/" },
   { slug: "grive-image-host", url: "https://griveimagehost.vercel.app/" },
+  { slug: "zaney-strands", url: "https://zaneystrands.vercel.app/" },
 ];
 
 const outDir = path.join(path.dirname(fileURLToPath(import.meta.url)), "..", "public", "screenshots");

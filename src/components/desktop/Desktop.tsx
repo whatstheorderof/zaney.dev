@@ -18,9 +18,34 @@ import { AboutWindow } from "./AboutWindow";
 import { ContextMenu, type MenuEntry } from "./ContextMenu";
 import { DesktopIcon } from "./DesktopIcon";
 import { Dock } from "./Dock";
+import { FolderView } from "./FolderView";
+import { IconInfoCard } from "./IconInfoCard";
 import { MenuBar } from "./MenuBar";
 import { MobilePages } from "./MobilePages";
 import { WallpaperWindow } from "./WallpaperWindow";
+
+const GROUPED_STORAGE_KEY = "zaney-grouped";
+
+/** iPhone-style grouping: one folder per kind; about.txt stays loose. */
+function deriveFolders(items: DesktopItem[]): DesktopItem[] {
+  const apps = items.filter((i) => i.action !== "about");
+  const loose = items.filter((i) => i.action === "about");
+  const kinds = [...new Set(apps.map((i) => i.kind))].sort();
+  const folders: DesktopItem[] = kinds.map((kind) => {
+    const children = apps.filter((i) => i.kind === kind);
+    return {
+      id: `folder:${kind}`,
+      name: kind,
+      kind,
+      description: `${children.length} ${children.length === 1 ? "item" : "items"}`,
+      action: "folder",
+      icon: { type: "folder", items: children },
+      x: 50,
+      y: 40,
+    };
+  });
+  return [...folders, ...loose];
+}
 
 /**
  * macOS-style arrangement: columns from the top-right corner, filling down.
@@ -59,6 +84,12 @@ export function Desktop() {
   const [menu, setMenu] = useState<MenuState | null>(null);
 
   const [iconSize, setIconSize] = useState<IconSize>("medium");
+  const [info, setInfo] = useState<{ id: string; x: number; y: number } | null>(
+    null
+  );
+  const [grouped, setGrouped] = useState(false);
+  const [folderItems, setFolderItems] = useState<DesktopItem[] | null>(null);
+  const [openFolderKind, setOpenFolderKind] = useState<string | null>(null);
 
   // Restore saved settings (async so SSR markup stays deterministic)
   useEffect(() => {
@@ -70,6 +101,10 @@ export function Desktop() {
       const savedSize = localStorage.getItem(ICON_SIZE_STORAGE_KEY);
       if (savedSize && savedSize in ICON_SIZES) {
         setIconSize(savedSize as IconSize);
+      }
+      if (localStorage.getItem(GROUPED_STORAGE_KEY) === "true") {
+        setFolderItems(gridLayout(deriveFolders(initialItems)));
+        setGrouped(true);
       }
     });
     return () => cancelAnimationFrame(raf);
@@ -89,6 +124,11 @@ export function Desktop() {
     wallpapers.find((w) => w.id === wallpaperId) ?? defaultWallpaper;
 
   const openItem = useCallback((item: DesktopItem) => {
+    setInfo(null);
+    if (item.action === "folder") {
+      setOpenFolderKind(item.kind);
+      return;
+    }
     setHasOpened(true);
     if (item.action === "about") {
       setAboutOpen(true);
@@ -104,12 +144,48 @@ export function Desktop() {
 
   const arrange = useCallback(
     (order?: (a: DesktopItem, b: DesktopItem) => number) => {
+      setInfo(null);
       const next = order ? [...items].sort(order) : items;
       setItems(gridLayout(next));
+      if (grouped) setFolderItems(gridLayout(deriveFolders(next)));
       setLayoutKey((k) => k + 1);
     },
-    [items]
+    [items, grouped]
   );
+
+  const toggleGrouped = useCallback(() => {
+    setInfo(null);
+    setOpenFolderKind(null);
+    if (grouped) {
+      setGrouped(false);
+      localStorage.setItem(GROUPED_STORAGE_KEY, "false");
+    } else {
+      setFolderItems(gridLayout(deriveFolders(items)));
+      setGrouped(true);
+      localStorage.setItem(GROUPED_STORAGE_KEY, "true");
+    }
+    setLayoutKey((k) => k + 1);
+  }, [grouped, items]);
+
+  /** Single click/tap: show the info card (folders open straight away). */
+  const showInfo = useCallback((item: DesktopItem, rect: DOMRect) => {
+    if (item.action === "folder") return;
+    const x = Math.min(
+      Math.max(rect.left + rect.width / 2, 140),
+      window.innerWidth - 140
+    );
+    setInfo({ id: item.id, x, y: rect.top });
+  }, []);
+
+  /** Tap flow for mobile pages and open folders: info first, then open. */
+  const handleIconTap = (item: DesktopItem, rect: DOMRect) => {
+    if (item.action === "folder") {
+      openItem(item);
+      return;
+    }
+    if (info?.id === item.id) openItem(item);
+    else showInfo(item, rect);
+  };
 
   const onContextMenu = (e: React.MouseEvent) => {
     const target = e.target as HTMLElement;
@@ -140,7 +216,17 @@ export function Desktop() {
             a.kind.localeCompare(b.kind) || a.name.localeCompare(b.name)
         ),
     },
+    {
+      type: "item",
+      label: `${grouped ? "\u2713 " : " "}Group into Folders`,
+      onSelect: toggleGrouped,
+    },
   ];
+
+  const displayItems = grouped && folderItems ? folderItems : items;
+  const infoItem = info
+    ? items.find((i) => i.id === info.id)
+    : undefined;
 
   const menuTarget = menu?.itemId
     ? items.find((i) => i.id === menu.itemId)
@@ -194,7 +280,10 @@ export function Desktop() {
       <div
         className="absolute inset-0 z-10"
         onPointerDown={(e) => {
-          if (e.target === e.currentTarget) setSelectedId(null);
+          if (e.target === e.currentTarget) {
+            setSelectedId(null);
+            setInfo(null);
+          }
         }}
       >
         {/* Faint wordmark baked into the wallpaper */}
@@ -212,7 +301,7 @@ export function Desktop() {
 
         {/* Free-form desktop for pointer devices / wide screens */}
         <div className="hidden sm:block">
-          {items.map((item, i) => (
+          {displayItems.map((item, i) => (
             <DesktopIcon
               key={`${item.id}:${layoutKey}`}
               item={item}
@@ -221,6 +310,7 @@ export function Desktop() {
               tilePx={ICON_SIZES[iconSize].tile}
               onSelect={setSelectedId}
               onOpen={openItem}
+              onInfo={showInfo}
             />
           ))}
         </div>
@@ -228,10 +318,10 @@ export function Desktop() {
         {/* iPhone-style swipeable pages on small screens */}
         <div className="absolute inset-x-0 bottom-28 top-9 sm:hidden">
           <MobilePages
-            items={items}
+            items={displayItems}
             iconSize={iconSize}
             tone={wallpaper.tone}
-            onOpen={openItem}
+            onIconTap={handleIconTap}
           />
         </div>
 
@@ -261,6 +351,24 @@ export function Desktop() {
       )}
 
       <Dock items={dockItems} onOpen={openItem} />
+
+      {openFolderKind && (
+        <FolderView
+          name={openFolderKind}
+          items={items.filter(
+            (i) => i.kind === openFolderKind && i.action !== "about"
+          )}
+          onIconTap={handleIconTap}
+          onClose={() => {
+            setOpenFolderKind(null);
+            setInfo(null);
+          }}
+        />
+      )}
+
+      {infoItem && info && (
+        <IconInfoCard item={infoItem} x={info.x} y={info.y} onOpen={openItem} />
+      )}
 
       {menu && (
         <ContextMenu

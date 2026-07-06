@@ -12,6 +12,11 @@ export const wallpapers: Wallpaper[] = [
   { id: "sea", name: "Open Sea", className: "wallpaper-sea", tone: "dark" },
   { id: "aero", name: "Aero 2000", className: "wallpaper-aero", tone: "light" },
   { id: "sunset", name: "Sunset Drive", className: "wallpaper-sunset", tone: "light" },
+  { id: "grass", name: "Fresh Cut", className: "wallpaper-grass", tone: "dark" },
+  { id: "aurora", name: "Aurora", className: "wallpaper-aurora", tone: "dark" },
+  { id: "candy", name: "Candy Floss", className: "wallpaper-candy", tone: "light" },
+  { id: "city", name: "City Lights", className: "wallpaper-city", tone: "dark" },
+  { id: "dune", name: "Sand Dune", className: "wallpaper-dune", tone: "light" },
 ];
 
 export const defaultWallpaper = wallpapers[0];

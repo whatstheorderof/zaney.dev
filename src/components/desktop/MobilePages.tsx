@@ -13,12 +13,13 @@ export function MobilePages({
   items,
   iconSize,
   tone,
-  onOpen,
+  onIconTap,
 }: {
   items: DesktopItem[];
   iconSize: IconSize;
   tone: "light" | "dark";
-  onOpen: (item: DesktopItem) => void;
+  /** First tap shows the info card, second tap (or Open) launches. */
+  onIconTap: (item: DesktopItem, rect: DOMRect) => void;
 }) {
   const cfg = ICON_SIZES[iconSize];
   const pagerRef = useRef<HTMLDivElement>(null);
@@ -68,7 +69,9 @@ export function MobilePages({
               <button
                 key={item.id}
                 type="button"
-                onClick={() => onOpen(item)}
+                onClick={(e) =>
+                  onIconTap(item, e.currentTarget.getBoundingClientRect())
+                }
                 className="animate-pop-in flex w-full flex-col items-center gap-1.5 px-1"
                 style={{ animationDelay: `${100 + i * 40}ms` }}
               >
