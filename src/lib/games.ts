@@ -9,6 +9,14 @@ export type Game = {
 
 export const zaneyGames: Game[] = [
   {
+    slug: "zaney-games",
+    name: "Zaney Games",
+    tagline: "The zaney.games hub — every daily puzzle in one place.",
+    category: "Hub",
+    url: "https://zaneygames.vercel.app/",
+    status: "live",
+  },
+  {
     slug: "zaney-sudoku",
     name: "Zaney Sudoku",
     tagline: "Daily sudoku with a Zaney twist.",

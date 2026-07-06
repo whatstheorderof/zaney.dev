@@ -4,6 +4,7 @@ import { fileURLToPath } from "node:url";
 
 // `clip` crops a square region for icon-friendly art on light/busy pages.
 const games = [
+  { slug: "zaney-games", url: "https://zaneygames.vercel.app/", clip: { x: 0, y: 0, width: 800, height: 800 } },
   { slug: "zaney-sudoku", url: "https://www.zaneysudoku.com/" },
   { slug: "zaney-tarot", url: "https://www.zaneytarot.com/" },
   { slug: "zaney-links", url: "https://zaneylinks.vercel.app/" },
