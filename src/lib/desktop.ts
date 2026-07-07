@@ -50,6 +50,7 @@ const positions: Record<string, [number, number]> = {
   "zaney-games": [64, 33],
   "zaney-kakuro": [30, 46],
   "zaney-aquarium": [75, 50],
+  "witch-please": [42, 15],
 };
 
 export const gameItems: DesktopItem[] = allGames.map((game) => {

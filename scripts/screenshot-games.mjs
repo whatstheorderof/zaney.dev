@@ -18,6 +18,7 @@ const games = [
   { slug: "grive-image-host", url: "https://griveimagehost.vercel.app/", clip: { x: 120, y: 30, width: 740, height: 740 } },
   { slug: "zaney-kakuro", url: "https://zaneykakuro.vercel.app/" },
   { slug: "zaney-aquarium", url: "https://zaneyaquarium.vercel.app/", clip: { x: 480, y: 20, width: 460, height: 460 } },
+  { slug: "witch-please", url: "https://witchplease.vercel.app/", clip: { x: 90, y: 60, width: 620, height: 620 } },
   { slug: "zaney-strands", url: "https://zaneystrands.vercel.app/", clip: { x: 330, y: 85, width: 540, height: 540 } },
 ];
 

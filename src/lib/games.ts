@@ -131,6 +131,14 @@ export const otherGames: Game[] = [
     url: "https://zaneyaquarium.vercel.app/",
     status: "live",
   },
+  {
+    slug: "witch-please",
+    name: "Witch Please",
+    tagline: "A cozy witch's-eye adventure through Gogo's Yard.",
+    category: "Adventure",
+    url: "https://witchplease.vercel.app/",
+    status: "live",
+  },
 ];
 
 export const allGames: Game[] = [...zaneyGames, ...otherGames];
