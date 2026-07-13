@@ -57,6 +57,7 @@ export function DesktopIcon({
   onOpen,
   onInfo,
   onPress,
+  onQuickLook,
 }: {
   item: DesktopItem;
   index: number;
@@ -69,6 +70,8 @@ export function DesktopIcon({
   onInfo?: (item: DesktopItem, rect: DOMRect) => void;
   /** Called on pointer down, before any tap/drag resolves. */
   onPress?: () => void;
+  /** Space bar on a focused icon — Quick Look, matching Finder's Enter/Space split. */
+  onQuickLook?: (item: DesktopItem) => void;
 }) {
   const [z, setZ] = useState(1);
   const lastTap = useRef(0);
@@ -100,9 +103,12 @@ export function DesktopIcon({
         onPress?.();
       }}
       onKeyDown={(e) => {
-        if (e.key === "Enter" || e.key === " ") {
+        if (e.key === "Enter") {
           e.preventDefault();
           onOpen(item);
+        } else if (e.key === " ") {
+          e.preventDefault();
+          onQuickLook?.(item);
         }
       }}
       onFocus={() => onSelect(item.id)}

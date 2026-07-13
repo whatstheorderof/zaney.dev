@@ -14,12 +14,15 @@ export function IconInfoCard({
   y,
   onOpen,
   onClose,
+  onPreview,
 }: {
   item: DesktopItem;
   x: number;
   y: number;
   onOpen: (item: DesktopItem) => void;
   onClose: () => void;
+  /** Opens the full Quick Look preview (only offered for screenshot items). */
+  onPreview?: (item: DesktopItem) => void;
 }) {
   const { offset, handlers } = useDraggable();
 
@@ -64,14 +67,26 @@ export function IconInfoCard({
               {item.description}
             </p>
           )}
-          <button
-            type="button"
-            onClick={() => onOpen(item)}
-            onPointerDown={(e) => e.stopPropagation()}
-            className="mt-2.5 w-full rounded-lg bg-white/90 py-1.5 text-xs font-semibold text-neutral-900 hover:bg-white"
-          >
-            Open
-          </button>
+          <div className="mt-2.5 flex gap-1.5">
+            {onPreview && item.icon.type === "screenshot" && (
+              <button
+                type="button"
+                onClick={() => onPreview(item)}
+                onPointerDown={(e) => e.stopPropagation()}
+                className="flex-1 rounded-lg bg-white/15 py-1.5 text-xs font-semibold text-white hover:bg-white/25"
+              >
+                Preview
+              </button>
+            )}
+            <button
+              type="button"
+              onClick={() => onOpen(item)}
+              onPointerDown={(e) => e.stopPropagation()}
+              className="flex-1 rounded-lg bg-white/90 py-1.5 text-xs font-semibold text-neutral-900 hover:bg-white"
+            >
+              Open
+            </button>
+          </div>
           <span className="absolute left-1/2 top-full h-2.5 w-2.5 -translate-x-1/2 -translate-y-1/2 rotate-45 bg-neutral-600/60" />
         </div>
       </div>

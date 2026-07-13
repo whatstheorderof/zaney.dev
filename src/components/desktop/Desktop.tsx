@@ -22,6 +22,7 @@ import { FolderView } from "./FolderView";
 import { IconInfoCard } from "./IconInfoCard";
 import { MenuBar } from "./MenuBar";
 import { MobilePages } from "./MobilePages";
+import { QuickLook } from "./QuickLook";
 import { WallpaperWindow } from "./WallpaperWindow";
 
 const GROUPED_STORAGE_KEY = "zaney-grouped";
@@ -90,6 +91,7 @@ export function Desktop() {
   const [grouped, setGrouped] = useState(false);
   const [folderItems, setFolderItems] = useState<DesktopItem[] | null>(null);
   const [openFolderKind, setOpenFolderKind] = useState<string | null>(null);
+  const [quickLookId, setQuickLookId] = useState<string | null>(null);
 
   // Restore saved settings (async so SSR markup stays deterministic)
   useEffect(() => {
@@ -174,6 +176,12 @@ export function Desktop() {
     setInfo({ id: item.id, x: rect.left + rect.width / 2, y: rect.top });
   }, []);
 
+  const openQuickLook = useCallback((item: DesktopItem) => {
+    if (item.action === "folder") return;
+    setInfo(null);
+    setQuickLookId(item.id);
+  }, []);
+
   /** Tap flow for mobile pages and open folders: info first, then open. */
   const handleIconTap = (item: DesktopItem, rect: DOMRect) => {
     if (item.action === "folder") {
@@ -224,12 +232,24 @@ export function Desktop() {
   const infoItem = info
     ? items.find((i) => i.id === info.id)
     : undefined;
+  const quickLookItem = quickLookId
+    ? items.find((i) => i.id === quickLookId)
+    : undefined;
 
   const menuTarget = menu?.itemId
     ? items.find((i) => i.id === menu.itemId)
     : undefined;
   const menuEntries: MenuEntry[] = menuTarget
     ? [
+        ...(menuTarget.icon.type === "screenshot"
+          ? [
+              {
+                type: "item",
+                label: "Quick Look",
+                onSelect: () => openQuickLook(menuTarget),
+              } as MenuEntry,
+            ]
+          : []),
         {
           type: "item",
           label: `Open “${menuTarget.name}”`,
@@ -309,6 +329,7 @@ export function Desktop() {
               onOpen={openItem}
               onInfo={showInfo}
               onPress={() => setInfo(null)}
+              onQuickLook={openQuickLook}
             />
           ))}
         </div>
@@ -371,6 +392,18 @@ export function Desktop() {
           y={info.y}
           onOpen={openItem}
           onClose={() => setInfo(null)}
+          onPreview={openQuickLook}
+        />
+      )}
+
+      {quickLookItem && (
+        <QuickLook
+          item={quickLookItem}
+          onOpen={(item) => {
+            setQuickLookId(null);
+            openItem(item);
+          }}
+          onClose={() => setQuickLookId(null)}
         />
       )}
 
