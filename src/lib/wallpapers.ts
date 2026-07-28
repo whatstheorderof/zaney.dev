@@ -4,6 +4,8 @@ export type Wallpaper = {
   className: string;
   /** Overall brightness, used to keep the wordmark and hint text readable. */
   tone: "light" | "dark";
+  /** Present for moving wallpapers: autoplaying looped video + a static poster for the picker. */
+  video?: { src: string; poster: string };
 };
 
 export const wallpapers: Wallpaper[] = [
@@ -17,6 +19,46 @@ export const wallpapers: Wallpaper[] = [
   { id: "candy", name: "Candy Floss", className: "wallpaper-candy", tone: "light" },
   { id: "city", name: "City Lights", className: "wallpaper-city", tone: "dark" },
   { id: "dune", name: "Sand Dune", className: "wallpaper-dune", tone: "light" },
+  {
+    id: "silk-drift",
+    name: "Silk Drift",
+    className: "wallpaper-silk-drift",
+    tone: "light",
+    video: {
+      src: "/wallpapers/silk-drift.mp4",
+      poster: "/wallpapers/poster-silk-drift.jpg",
+    },
+  },
+  {
+    id: "satin-wave",
+    name: "Satin Wave",
+    className: "wallpaper-satin-wave",
+    tone: "light",
+    video: {
+      src: "/wallpapers/satin-wave.mp4",
+      poster: "/wallpapers/poster-satin-wave.jpg",
+    },
+  },
+  {
+    id: "opal-flow",
+    name: "Opal Flow",
+    className: "wallpaper-opal-flow",
+    tone: "light",
+    video: {
+      src: "/wallpapers/opal-flow.mp4",
+      poster: "/wallpapers/poster-opal-flow.jpg",
+    },
+  },
+  {
+    id: "ink-bloom",
+    name: "Ink Bloom",
+    className: "wallpaper-ink-bloom",
+    tone: "dark",
+    video: {
+      src: "/wallpapers/ink-bloom.mp4",
+      poster: "/wallpapers/poster-ink-bloom.jpg",
+    },
+  },
 ];
 
 export const defaultWallpaper = wallpapers[0];

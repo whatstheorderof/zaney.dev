@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import {
   desktopItems as initialItems,
   dockItems,
@@ -92,6 +92,9 @@ export function Desktop() {
   const [folderItems, setFolderItems] = useState<DesktopItem[] | null>(null);
   const [openFolderKind, setOpenFolderKind] = useState<string | null>(null);
   const [quickLookId, setQuickLookId] = useState<string | null>(null);
+  // Defaults to autoplay; corrected a frame later once we can check the
+  // media query (see settings-restore effect below).
+  const [reduceMotion, setReduceMotion] = useState(false);
 
   // Restore saved settings (async so SSR markup stays deterministic)
   useEffect(() => {
@@ -108,6 +111,9 @@ export function Desktop() {
         setFolderItems(gridLayout(deriveFolders(initialItems)));
         setGrouped(true);
       }
+      setReduceMotion(
+        window.matchMedia("(prefers-reduced-motion: reduce)").matches
+      );
     });
     return () => cancelAnimationFrame(raf);
   }, []);
@@ -124,6 +130,16 @@ export function Desktop() {
 
   const wallpaper =
     wallpapers.find((w) => w.id === wallpaperId) ?? defaultWallpaper;
+
+  // Backup for the declarative `autoPlay` attribute: some browsers/policies
+  // don't honor it reliably even for muted video, so kick playback off
+  // imperatively too whenever the active video wallpaper changes.
+  const videoRef = useRef<HTMLVideoElement>(null);
+  useEffect(() => {
+    if (wallpaper.video && !reduceMotion) {
+      videoRef.current?.play().catch(() => {});
+    }
+  }, [wallpaper.id, wallpaper.video, reduceMotion]);
 
   const openItem = useCallback((item: DesktopItem) => {
     setInfo(null);
@@ -288,6 +304,21 @@ export function Desktop() {
       className={`wallpaper ${wallpaper.className} relative h-svh w-full select-none overflow-hidden`}
       onContextMenu={onContextMenu}
     >
+      {wallpaper.video && (
+        <video
+          key={wallpaper.id}
+          ref={videoRef}
+          className="absolute inset-0 h-full w-full object-cover"
+          src={wallpaper.video.src}
+          poster={wallpaper.video.poster}
+          autoPlay={!reduceMotion}
+          loop
+          muted
+          playsInline
+          aria-hidden="true"
+        />
+      )}
+
       <MenuBar
         onAbout={() => setAboutOpen(true)}
         onView={(x, y) => setMenu({ x, y, itemId: null })}

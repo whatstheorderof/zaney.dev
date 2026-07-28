@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { wallpapers } from "@/lib/wallpapers";
 import { DesktopWindow } from "./DesktopWindow";
 
@@ -33,6 +34,15 @@ export function WallpaperWindow({
                   : "ring-black/10 group-hover:ring-black/30"
               } ${wp.className}`}
             >
+              {wp.video && (
+                <Image
+                  src={wp.video.poster}
+                  alt=""
+                  fill
+                  sizes="200px"
+                  className="object-cover"
+                />
+              )}
               <span
                 className={`absolute inset-0 flex items-center justify-center text-[11px] font-black tracking-tighter ${
                   wp.tone === "dark"
@@ -42,6 +52,11 @@ export function WallpaperWindow({
               >
                 zaney.dev
               </span>
+              {wp.video && (
+                <span className="absolute bottom-1 right-1 flex h-4 w-4 items-center justify-center rounded-full bg-black/55 text-[8px] text-white">
+                  ▶
+                </span>
+              )}
             </span>
             <span className="mt-1 block text-xs font-medium text-neutral-700">
               {wp.name}

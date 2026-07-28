@@ -29,12 +29,12 @@ export function DesktopWindow({
     <div
       data-window
       onPointerDownCapture={() => setZ(nextZ())}
-      className={`animate-window-in absolute left-1/2 top-[38%] -translate-x-1/2 -translate-y-1/2 overflow-hidden rounded-xl bg-white/90 shadow-2xl shadow-black/40 ring-1 ring-black/15 backdrop-blur-xl ${className}`}
+      className={`animate-window-in absolute left-1/2 top-[38%] flex max-h-[85vh] -translate-x-1/2 -translate-y-1/2 flex-col overflow-hidden rounded-xl bg-white/90 shadow-2xl shadow-black/40 ring-1 ring-black/15 backdrop-blur-xl ${className}`}
       style={{ marginLeft: offset.x, marginTop: offset.y, zIndex: z }}
     >
       <div
         {...handlers}
-        className="flex touch-none items-center gap-2 border-b border-black/10 bg-neutral-100/90 px-3 py-2"
+        className="flex shrink-0 touch-none items-center gap-2 border-b border-black/10 bg-neutral-100/90 px-3 py-2"
       >
         <button
           type="button"
@@ -49,7 +49,7 @@ export function DesktopWindow({
         <span className="h-3 w-3 rounded-full bg-[#28c840] ring-1 ring-black/10" />
         <span className="ml-2 font-mono text-xs text-neutral-500">{title}</span>
       </div>
-      {children}
+      <div className="min-h-0 overflow-y-auto">{children}</div>
     </div>
   );
 }
