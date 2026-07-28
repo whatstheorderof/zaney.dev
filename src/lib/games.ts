@@ -139,6 +139,30 @@ export const otherGames: Game[] = [
     url: "https://witchplease.vercel.app/",
     status: "live",
   },
+  {
+    slug: "dbl-games",
+    name: "DBL Games",
+    tagline: "A hub of 1800+ free unblocked games to play instantly.",
+    category: "Hub",
+    url: "https://dblgames.vercel.app/",
+    status: "live",
+  },
+  {
+    slug: "zaney-daw",
+    name: "zaney.daw",
+    tagline: "A multiplayer voxel world where blocks chain into music.",
+    category: "Music",
+    url: "https://zaney-daw.vercel.app/",
+    status: "live",
+  },
+  {
+    slug: "youtube-mpc",
+    name: "CHOP/16",
+    tagline: "Chop any YouTube video into 16 playable pads.",
+    category: "Music",
+    url: "https://youtubempc.vercel.app/",
+    status: "live",
+  },
 ];
 
 export const allGames: Game[] = [...zaneyGames, ...otherGames];

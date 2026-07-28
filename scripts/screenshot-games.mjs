@@ -20,6 +20,9 @@ const games = [
   { slug: "zaney-aquarium", url: "https://zaneyaquarium.vercel.app/", clip: { x: 480, y: 20, width: 460, height: 460 } },
   { slug: "witch-please", url: "https://witchplease.vercel.app/", clip: { x: 90, y: 60, width: 620, height: 620 } },
   { slug: "zaney-strands", url: "https://zaneystrands.vercel.app/", clip: { x: 330, y: 85, width: 540, height: 540 } },
+  { slug: "dbl-games", url: "https://dblgames.vercel.app/", clip: { x: 0, y: 0, width: 800, height: 800 } },
+  { slug: "zaney-daw", url: "https://zaney-daw.vercel.app/", clip: { x: 330, y: 90, width: 620, height: 620 } },
+  { slug: "youtube-mpc", url: "https://youtubempc.vercel.app/", clip: { x: 0, y: 0, width: 800, height: 800 } },
 ];
 
 const outDir = path.join(path.dirname(fileURLToPath(import.meta.url)), "..", "public", "screenshots");
