@@ -149,6 +149,14 @@ code {
   background-color: #050505;
 }
 
+.wallpaper-sherbet-haze {
+  background-color: #f3d9c9;
+}
+
+.wallpaper-smoke-veil {
+  background-color: #232323;
+}
+
 .wallpaper::after {
   content: "";
   position: absolute;

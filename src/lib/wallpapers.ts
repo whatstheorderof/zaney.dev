@@ -59,6 +59,26 @@ export const wallpapers: Wallpaper[] = [
       poster: "/wallpapers/poster-ink-bloom.jpg",
     },
   },
+  {
+    id: "sherbet-haze",
+    name: "Sherbet Haze",
+    className: "wallpaper-sherbet-haze",
+    tone: "light",
+    video: {
+      src: "/wallpapers/sherbet-haze.mp4",
+      poster: "/wallpapers/poster-sherbet-haze.jpg",
+    },
+  },
+  {
+    id: "smoke-veil",
+    name: "Smoke Veil",
+    className: "wallpaper-smoke-veil",
+    tone: "dark",
+    video: {
+      src: "/wallpapers/smoke-veil.mp4",
+      poster: "/wallpapers/poster-smoke-veil.jpg",
+    },
+  },
 ];
 
 export const defaultWallpaper = wallpapers[0];
