@@ -27,9 +27,13 @@ export function IconArt({
     );
   }
   if (item.icon.type === "folder") {
+    // Solid, not translucent: a frosted-glass tile only reads as "a folder"
+    // against a wallpaper. Nested inside the dock's own frosted bar, the
+    // wash barely contrasts with its surroundings and looks like a hollow
+    // outline instead — an opaque tile stays legible in both places.
     return (
       <div
-        className={`${className} grid grid-cols-3 gap-[6%] bg-white/40 p-[9%] backdrop-blur-md`}
+        className={`${className} grid grid-cols-3 gap-[6%] bg-neutral-100 p-[9%] ring-1 ring-inset ring-black/10`}
       >
         {item.icon.items.slice(0, 9).map((child) => (
           <span key={child.id} className="overflow-hidden rounded-[22%]">
