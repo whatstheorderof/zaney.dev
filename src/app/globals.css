@@ -157,6 +157,14 @@ code {
   background-color: #232323;
 }
 
+.wallpaper-coral-tide {
+  background-color: #e8c9c8;
+}
+
+.wallpaper-nebula-haze {
+  background-color: #b7b6e0;
+}
+
 .wallpaper::after {
   content: "";
   position: absolute;

@@ -79,6 +79,26 @@ export const wallpapers: Wallpaper[] = [
       poster: "/wallpapers/poster-smoke-veil.jpg",
     },
   },
+  {
+    id: "coral-tide",
+    name: "Coral Tide",
+    className: "wallpaper-coral-tide",
+    tone: "light",
+    video: {
+      src: "/wallpapers/coral-tide.mp4",
+      poster: "/wallpapers/poster-coral-tide.jpg",
+    },
+  },
+  {
+    id: "nebula-haze",
+    name: "Nebula Haze",
+    className: "wallpaper-nebula-haze",
+    tone: "light",
+    video: {
+      src: "/wallpapers/nebula-haze.mp4",
+      poster: "/wallpapers/poster-nebula-haze.jpg",
+    },
+  },
 ];
 
 export const defaultWallpaper = wallpapers[0];
