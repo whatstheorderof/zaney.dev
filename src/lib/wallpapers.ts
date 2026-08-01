@@ -101,6 +101,7 @@ export const wallpapers: Wallpaper[] = [
   },
 ];
 
-export const defaultWallpaper = wallpapers[0];
+export const defaultWallpaper =
+  wallpapers.find((w) => w.id === "nebula-haze") ?? wallpapers[0];
 
 export const WALLPAPER_STORAGE_KEY = "zaney-wallpaper";

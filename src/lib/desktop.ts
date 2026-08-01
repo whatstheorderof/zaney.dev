@@ -14,7 +14,7 @@ export type DesktopItem = {
   description?: string;
   /** External url opened on double-click (or mailto:). Omitted for in-page items like the About window. */
   url?: string;
-  action?: "about" | "folder";
+  action?: "about" | "mail" | "folder";
   icon: DesktopIconArt;
   /** Initial position on the desktop, in % of the viewport. */
   x: number;
@@ -54,6 +54,7 @@ const positions: Record<string, [number, number]> = {
   "dbl-games": [17, 40],
   "zaney-daw": [60, 45],
   "youtube-mpc": [8, 50],
+  "volt-dj": [45, 55],
 };
 
 export const gameItems: DesktopItem[] = allGames.map((game) => {
@@ -86,6 +87,7 @@ export const mailItem: DesktopItem = {
   name: "Say hi",
   kind: "Contact",
   description: "Send me an email.",
+  action: "mail",
   url: "mailto:deathbyleisure@gmail.com",
   icon: { type: "glyph", glyph: "✉", className: "bg-sky-500 text-white" },
   x: 0,

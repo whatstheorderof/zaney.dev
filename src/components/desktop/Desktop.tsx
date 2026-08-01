@@ -27,10 +27,12 @@ import { WallpaperWindow } from "./WallpaperWindow";
 
 const GROUPED_STORAGE_KEY = "zaney-grouped";
 
-/** iPhone-style grouping: one folder per kind; about.txt stays loose. */
+/** iPhone-style grouping: one folder per kind; about.txt/mail stay loose. */
 function deriveFolders(items: DesktopItem[]): DesktopItem[] {
-  const apps = items.filter((i) => i.action !== "about");
-  const loose = items.filter((i) => i.action === "about");
+  const isLoose = (i: DesktopItem) =>
+    i.action === "about" || i.action === "mail";
+  const apps = items.filter((i) => !isLoose(i));
+  const loose = items.filter(isLoose);
   const kinds = [...new Set(apps.map((i) => i.kind))].sort();
   const folders: DesktopItem[] = kinds.map((kind) => {
     const children = apps.filter((i) => i.kind === kind);
@@ -99,6 +101,12 @@ export function Desktop() {
   // Restore saved settings (async so SSR markup stays deterministic)
   useEffect(() => {
     const raf = requestAnimationFrame(() => {
+      // Default to a tidy "Clean Up" grid rather than the hand-scattered
+      // positions baked into desktopItems — those only exist as a
+      // fallback for icons with no explicit slot. Sized from the real
+      // viewport like Clean Up itself, so it's always correct regardless
+      // of window size.
+      setItems(gridLayout(initialItems));
       const savedWallpaper = localStorage.getItem(WALLPAPER_STORAGE_KEY);
       if (savedWallpaper && wallpapers.some((w) => w.id === savedWallpaper)) {
         setWallpaperId(savedWallpaper);
@@ -245,6 +253,10 @@ export function Desktop() {
   ];
 
   const displayItems = grouped && folderItems ? folderItems : items;
+  // The dock is a separate "favorites bar" independent of desktop
+  // arrangement/sorting — grouped here just means it shows the same
+  // per-kind folders instead of every icon individually.
+  const dockDisplayItems = grouped ? deriveFolders(dockItems) : dockItems;
   const infoItem = info
     ? items.find((i) => i.id === info.id)
     : undefined;
@@ -400,13 +412,16 @@ export function Desktop() {
         </p>
       )}
 
-      <Dock items={dockItems} onOpen={openItem} />
+      <Dock items={dockDisplayItems} onOpen={openItem} />
 
       {openFolderKind && (
         <FolderView
           name={openFolderKind}
           items={items.filter(
-            (i) => i.kind === openFolderKind && i.action !== "about"
+            (i) =>
+              i.kind === openFolderKind &&
+              i.action !== "about" &&
+              i.action !== "mail"
           )}
           onIconTap={handleIconTap}
           onClose={() => {

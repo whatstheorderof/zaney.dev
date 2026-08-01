@@ -23,6 +23,7 @@ const games = [
   { slug: "dbl-games", url: "https://dblgames.vercel.app/", clip: { x: 0, y: 0, width: 800, height: 800 } },
   { slug: "zaney-daw", url: "https://zaney-daw.vercel.app/", clip: { x: 330, y: 90, width: 620, height: 620 } },
   { slug: "youtube-mpc", url: "https://youtubempc.vercel.app/", clip: { x: 0, y: 0, width: 800, height: 800 } },
+  { slug: "volt-dj", url: "https://voltdj.vercel.app/", clip: { x: 0, y: 0, width: 800, height: 800 } },
 ];
 
 const outDir = path.join(path.dirname(fileURLToPath(import.meta.url)), "..", "public", "screenshots");

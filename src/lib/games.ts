@@ -163,6 +163,14 @@ export const otherGames: Game[] = [
     url: "https://youtubempc.vercel.app/",
     status: "live",
   },
+  {
+    slug: "volt-dj",
+    name: "Volt DJ",
+    tagline: "Blend YouTube videos live on a neon two-deck mixer.",
+    category: "Music",
+    url: "https://voltdj.vercel.app/",
+    status: "live",
+  },
 ];
 
 export const allGames: Game[] = [...zaneyGames, ...otherGames];
