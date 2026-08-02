@@ -55,6 +55,7 @@ const positions: Record<string, [number, number]> = {
   "zaney-daw": [60, 45],
   "youtube-mpc": [8, 50],
   "volt-dj": [45, 55],
+  paintris: [37, 22],
 };
 
 export const gameItems: DesktopItem[] = allGames.map((game) => {

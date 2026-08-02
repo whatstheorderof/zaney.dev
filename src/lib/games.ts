@@ -171,6 +171,14 @@ export const otherGames: Game[] = [
     url: "https://voltdj.vercel.app/",
     status: "live",
   },
+  {
+    slug: "paintris",
+    name: "Paintris",
+    tagline: "Falling blocks made of wet paint — colours merge as they connect.",
+    category: "Puzzle",
+    url: "https://paintris.vercel.app/",
+    status: "live",
+  },
 ];
 
 export const allGames: Game[] = [...zaneyGames, ...otherGames];
