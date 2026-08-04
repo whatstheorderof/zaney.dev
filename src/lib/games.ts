@@ -179,6 +179,14 @@ export const otherGames: Game[] = [
     url: "https://paintris.vercel.app/",
     status: "live",
   },
+  {
+    slug: "reel-or-dare",
+    name: "Reel or Dare",
+    tagline: "Spin it, reel it, do it — a neon casino party game.",
+    category: "Party",
+    url: "https://reelordare.vercel.app/",
+    status: "live",
+  },
 ];
 
 export const allGames: Game[] = [...zaneyGames, ...otherGames];
