@@ -26,6 +26,7 @@ const games = [
   { slug: "volt-dj", url: "https://voltdj.vercel.app/", clip: { x: 0, y: 0, width: 800, height: 800 } },
   { slug: "paintris", url: "https://paintris.vercel.app/", clip: { x: 350, y: 40, width: 360, height: 360 } },
   { slug: "reel-or-dare", url: "https://reelordare.vercel.app/", clip: { x: 240, y: 40, width: 800, height: 800 } },
+  { slug: "hivefire", url: "https://hivefire.vercel.app/", clip: { x: 320, y: 0, width: 800, height: 800 } },
 ];
 
 const outDir = path.join(path.dirname(fileURLToPath(import.meta.url)), "..", "public", "screenshots");

@@ -175,7 +175,7 @@ export const otherGames: Game[] = [
     slug: "paintris",
     name: "Paintris",
     tagline: "Falling blocks made of wet paint — colours merge as they connect.",
-    category: "Arcade",
+    category: "Puzzle",
     url: "https://paintris.vercel.app/",
     status: "live",
   },
@@ -185,6 +185,14 @@ export const otherGames: Game[] = [
     tagline: "Spin it, reel it, do it — a neon casino party game.",
     category: "Party",
     url: "https://reelordare.vercel.app/",
+    status: "live",
+  },
+  {
+    slug: "hivefire",
+    name: "HIVEFIRE",
+    tagline: "Defend your hive against waves of invaders in 3D.",
+    category: "Arcade",
+    url: "https://hivefire.vercel.app/",
     status: "live",
   },
 ];
